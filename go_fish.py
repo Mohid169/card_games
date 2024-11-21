@@ -1,3 +1,5 @@
+import random 
+
 class Card:
     VALID_RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
     VALID_SUITS = ["spade", "ace", "hearts", "clubs"]
@@ -24,7 +26,7 @@ class DeckofCards:
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self):
-        pass
+        random.shuffle(self.cards)
 
     def draw(self):
         if not self.cards:
