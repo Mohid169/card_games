@@ -27,7 +27,6 @@ class DeckofCards:
         pass
 
     def draw(self):
-        if self.cards:
-            return self.cards.pop()
-        else:
-            return print("There are no cards left!")
+        if not self.cards:
+            raise ValueError("Cannot draw from an empty deck")
+        return self.cards.pop()
