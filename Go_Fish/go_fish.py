@@ -39,7 +39,7 @@ class Player:
     def __init__(self, name, hand=None):
         self.name = name
         self.hand = hand if hand is not None else []
-        self.books = []
+        self.books = {}
 
     def give_cards(self, rank):
         cards_to_give = []
@@ -56,4 +56,22 @@ class Player:
         return cards_to_give
 
     def check_books(self):
-        pass
+        for rank in Card.VALID_RANKS:
+            count = 0
+            for card in self.hand:
+                if card.rank == rank:
+                    count += 1
+
+            if count == 4:
+                self.books[rank] = "complete"
+                self.hand =[card for card in self.hand if card.rank != rank] 
+
+
+            
+
+
+
+
+
+
+
