@@ -1,7 +1,7 @@
 import random
 
 
-class Card():
+class Card:
     VALID_RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
     VALID_SUITS = ["spade", "ace", "hearts", "clubs"]
 
@@ -18,7 +18,7 @@ class Card():
         return f"{self.rank}{self.suit}"
 
 
-class DeckofCards():
+class DeckofCards:
     def __init__(self):
         self.cards = []
 
@@ -34,12 +34,13 @@ class DeckofCards():
             raise ValueError("Cannot draw from an empty deck")
         return self.cards.pop()
 
-class Player():
-    def __init__(self, name, hand = None):
+
+class Player:
+    def __init__(self, name, hand=None):
         self.name = name
         self.hand = hand if hand is not None else []
         self.books = []
-    
+
     def give_cards(self, rank):
         cards_to_give = []
         remaining_hand = []
@@ -49,15 +50,10 @@ class Player():
 
             else:
                 remaining_hand.append(card)
-                
 
         self.hand = remaining_hand
 
         return cards_to_give
 
     def check_books(self):
-       pass 
-
-
-        
-
+        pass
