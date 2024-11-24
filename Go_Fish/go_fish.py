@@ -122,8 +122,8 @@ class Game:
 
     def is_game_over(self):
         if (
-            all(player.check_hand() for player in self.players) and len(self.deck.cards)
-            == 0
+            all(player.check_hand() for player in self.players)
+            and len(self.deck.cards) == 0
         ):
             return True
         return False
@@ -152,7 +152,9 @@ class Game:
                         if len(self.deck.cards) > 5:
                             current_player.hand.extend(self.deck.draw(5))
                         else:
-                            current_player.hand.extend(self.deck.draw(len(self.deck.cards)))
+                            current_player.hand.extend(
+                                self.deck.draw(len(self.deck.cards))
+                            )
 
                 opponent = self.choose_opponent(current_player)
                 if opponent is None:
@@ -173,8 +175,9 @@ class Game:
         winner = max(scores, key=scores.get)
         print("Game Results:")
         for player, score in scores.items():
-            print(f"{player}: {score} books")   
+            print(f"{player}: {score} books")
         print(f"The winner is {winner}!")
+
 
 if __name__ == "__main__":
     num_players = int(input("Enter number of players (2-6): "))
