@@ -119,3 +119,48 @@ class Game:
                 player_1.hand.extend(self.deck.draw(1))
             player_1.check_books()
             return False
+
+    def is_game_over(self):
+        if (
+            all(player.check_hand() for player in self.players) & len(self.deck.cards)
+            == 0
+        ):
+            return True
+        return False
+
+    def choose_opponent(self, current_player):
+        opponents = [
+            player
+            for player in self.players
+            if player != current_player and player.hand
+        ]
+        if opponents is None:
+            return None  # Skip to the next player's turn
+        return random.choice(opponents)
+
+    def choose_rank(self, player):
+        good_ranks = [card.rank for card in player.hand]
+        return random.choice(good_ranks)
+
+    def play(self):
+        while not self.is_game_over():
+            for player in self.players:
+                opponent = self.choose_opponent(player)
+                if opponent is None:
+                    continue
+                rank_choice = choose_rank(self, player)
+                successful = self.take_turn(player, opponent, rank_choice)
+                if successful:
+                    print(f"{player.name} got cards from {opponent.name}!")
+                else:
+                    print(f"{player.name} goes fishing and draws a card.")
+        print("game over")
+        self.display_winner()
+
+    def display_winner(self):
+        scores = {player.name: len(player.books) for player in self.players}
+        winner = max(scores, key=scores.get)
+        print("Game Results:")
+        for player, score in scores.items():
+            print(f"{player}: {score} books")
+        print(f"The winner is {winner}!")
