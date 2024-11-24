@@ -122,7 +122,7 @@ class Game:
 
     def is_game_over(self):
         if (
-            all(player.check_hand() for player in self.players) & len(self.deck.cards)
+            all(player.check_hand() for player in self.players) and len(self.deck.cards)
             == 0
         ):
             return True
@@ -134,26 +134,37 @@ class Game:
             for player in self.players
             if player != current_player and player.hand
         ]
-        if opponents is None:
+        if not opponents:
             return None  # Skip to the next player's turn
         return random.choice(opponents)
 
     def choose_rank(self, player):
+        if player.check_hand():
+            return None
         good_ranks = [card.rank for card in player.hand]
         return random.choice(good_ranks)
 
     def play(self):
         while not self.is_game_over():
-            for player in self.players:
-                opponent = self.choose_opponent(player)
+            for current_player in self.players:
+                if current_player.check_hand():
+                    if len(self.deck.cards) > 0:
+                        if len(self.deck.cards) > 5:
+                            current_player.hand.extend(self.deck.draw(5))
+                        else:
+                            current_player.hand.extend(self.deck.draw(len(self.deck.cards)))
+
+                opponent = self.choose_opponent(current_player)
                 if opponent is None:
                     continue
-                rank_choice = choose_rank(self, player)
-                successful = self.take_turn(player, opponent, rank_choice)
+                rank_choice = self.choose_rank(current_player)
+                if rank_choice is None:
+                    continue
+                successful = self.take_turn(current_player, opponent, rank_choice)
                 if successful:
-                    print(f"{player.name} got cards from {opponent.name}!")
+                    print(f"{current_player.name} got cards from {opponent.name}!")
                 else:
-                    print(f"{player.name} goes fishing and draws a card.")
+                    print(f"{current_player.name} goes fishing and draws a card.")
         print("game over")
         self.display_winner()
 
@@ -162,5 +173,10 @@ class Game:
         winner = max(scores, key=scores.get)
         print("Game Results:")
         for player, score in scores.items():
-            print(f"{player}: {score} books")
+            print(f"{player}: {score} books")   
         print(f"The winner is {winner}!")
+
+if __name__ == "__main__":
+    num_players = int(input("Enter number of players (2-6): "))
+    game = Game(num_players)
+    game.play()
